@@ -25,6 +25,19 @@ html, body {
   border-bottom: 1px solid #1a1d20;
 }
 
+.unit-image {
+  background: #2a2d30;
+  height: 120px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-style: italic;
+  border: 1px solid #1c1f22;
+}
+
+
 #logo {
   width: 34px;
   height: 34px;
@@ -87,17 +100,18 @@ html, body {
 
 /* ===== SIDEBAR FLOAT ===== */
 #sidebar {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 340px;
-  height: 100%;
+  height: 100vh;
   background: #3a3e42;
   border-left: 1px solid #222;
   padding: 6px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 999;
 }
+
 
 /* ===== PANELS ===== */
 .panel {
@@ -193,6 +207,7 @@ html, body {
     <div class="panel">
       <div class="panel-header" onclick="togglePanel(this)">UNIT STATUS <span>▾</span></div>
       <div class="panel-body">
+        <div class="unit-image">[Unknown]</div>
         <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
         <div class="row"><span>Unit Class</span><span>[Unknown]</span></div>
         <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
