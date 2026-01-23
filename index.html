@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Command UI – Refined Clone</title>
+<title>AWACS UI</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -15,22 +15,38 @@ html, body {
   overflow: hidden;
 }
 
-/* ===== MENU BAR ===== */
-#menu-bar {
-  height: 28px;
-  background: #3b3f43;
+/* ===== TOP BAR ===== */
+#top-bar {
+  height: 40px;
+  background: linear-gradient(#3f4449, #2e3236);
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 14px;
-  font-size: 13px;
-  border-bottom: 1px solid #222;
+  padding: 0 12px;
+  border-bottom: 1px solid #1a1d20;
 }
 
-/* ===== TOOL BAR ===== */
+#logo {
+  width: 36px;
+  height: 36px;
+  background: #555;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #ccc;
+}
+
+#title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e6e6e6;
+}
+
+/* ===== TOOLBAR ===== */
 #tool-bar {
-  height: 40px;
-  background: linear-gradient(#4b4f54, #3a3e42);
+  height: 36px;
+  background: #3a3e42;
   display: flex;
   align-items: center;
   padding: 0 8px;
@@ -42,7 +58,7 @@ html, body {
   background: #5a5f65;
   border: 1px solid #2a2d30;
   color: #eee;
-  padding: 6px 10px;
+  padding: 4px 10px;
   font-size: 12px;
 }
 
@@ -59,25 +75,32 @@ html, body {
 
 /* ===== MAIN ===== */
 #main {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  height: calc(100% - 94px - 66px);
+  position: relative;
+  height: calc(100% - 102px);
 }
 
 /* ===== MAP ===== */
 #map {
-  background: #6f747a;
-  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #70767c;
 }
 
-/* ===== SIDEBAR ===== */
+/* ===== SIDEBAR FLOAT ===== */
 #sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 100%;
   background: #3a3e42;
   border-left: 1px solid #222;
   padding: 6px;
   overflow-y: auto;
+  z-index: 10;
 }
 
+/* ===== PANELS ===== */
 .panel {
   background: #4a4f55;
   border: 1px solid #2a2d30;
@@ -90,6 +113,9 @@ html, body {
   font-size: 12px;
   font-weight: bold;
   border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }
 
 .panel-body {
@@ -97,60 +123,43 @@ html, body {
   font-size: 12px;
 }
 
+.panel.collapsed .panel-body {
+  display: none;
+}
+
 .row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 4px;
-  color: #d0d0d0;
-}
-
-/* ===== IMAGE PLACEHOLDER ===== */
-.unit-image {
-  background: #2a2d30;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  font-style: italic;
-  border: 1px solid #1c1f22;
-  margin-bottom: 6px;
-}
-
-/* ===== BARS ===== */
-.bar {
-  height: 8px;
-  background: #222;
-  margin-top: 4px;
-}
-.bar span {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(to right, red, yellow, green);
 }
 
 /* ===== LOG ===== */
 #log {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   height: 66px;
+  width: 100%;
   background: #1c1f22;
   border-top: 1px solid #000;
   padding: 4px 6px;
   font-size: 11px;
   overflow-y: auto;
+  z-index: 5;
 }
 
 .log-line {
-  color: #cfd8dc;
   line-height: 1.2em;
+  color: #cfd8dc;
 }
 </style>
 </head>
 
 <body>
 
-<div id="menu-bar">
-  File View Game Map Settings Quick Jump Unit Orders Contacts Missions + Ref. Points Editor Help
+<div id="top-bar">
+  <div id="logo">LOGO</div>
+  <div id="title">Aerial Warning and Control System</div>
 </div>
 
 <div id="tool-bar">
@@ -162,19 +171,17 @@ html, body {
   <button class="tool-btn">15x</button>
 </div>
 
-<div id="time-strip">
-  Time: martes, 1 de mayo de 2018 – Zulu: 00:00:00 – Local: 08:00:00 – 9 hr to go
-</div>
+<div id="time-strip"></div>
 
 <div id="main">
   <div id="map"></div>
 
   <div id="sidebar">
-
     <div class="panel">
-      <div class="panel-header">UNIT STATUS</div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        UNIT STATUS <span>▾</span>
+      </div>
       <div class="panel-body">
-        <div class="unit-image">[Unknown]</div>
         <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
         <div class="row"><span>Unit Class</span><span>[Unknown]</span></div>
         <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
@@ -182,7 +189,9 @@ html, body {
     </div>
 
     <div class="panel">
-      <div class="panel-header">SPECS</div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        SPECS <span>▾</span>
+      </div>
       <div class="panel-body">
         <div class="row"><span>Side</span><span>[Unknown]</span></div>
         <div class="row"><span>Course</span><span>[Unknown]</span></div>
@@ -192,44 +201,74 @@ html, body {
     </div>
 
     <div class="panel">
-      <div class="panel-header">DAMAGE</div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        DAMAGE <span>▾</span>
+      </div>
       <div class="panel-body">
-        <div class="row"><span>Integrity</span><span>[Unknown]</span></div>
-        <div class="bar"><span></span></div>
+        Integrity: [Unknown]
       </div>
     </div>
 
     <div class="panel">
-      <div class="panel-header">WEAPONS</div>
-      <div class="panel-body">
-        [Unknown]
+      <div class="panel-header" onclick="togglePanel(this)">
+        WEAPONS <span>▾</span>
       </div>
+      <div class="panel-body">[Unknown]</div>
     </div>
 
     <div class="panel">
-      <div class="panel-header">FUEL</div>
-      <div class="panel-body">
-        <div class="bar"><span></span></div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        FUEL <span>▾</span>
       </div>
+      <div class="panel-body">[Unknown]</div>
     </div>
 
     <div class="panel">
-      <div class="panel-header">EMCON</div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        EMCON <span>▾</span>
+      </div>
       <div class="panel-body">
-        <div class="row"><span>Radar</span><span>[Unknown]</span></div>
-        <div class="row"><span>Sonar</span><span>[Unknown]</span></div>
-        <div class="row"><span>ECM</span><span>[Unknown]</span></div>
+        Radar: [Unknown]<br>
+        Sonar: [Unknown]<br>
+        ECM: [Unknown]
       </div>
     </div>
-
   </div>
+
+  <div id="log"></div>
 </div>
 
-<div id="log">
-  <div class="log-line">Simulation initialized.</div>
-  <div class="log-line">No unit selected.</div>
-  <div class="log-line">Standing by.</div>
-</div>
+<script>
+function togglePanel(header) {
+  header.parentElement.classList.toggle("collapsed");
+}
+
+/* ===== TIME ===== */
+function updateTime() {
+  const now = new Date();
+  const local = now.toLocaleString();
+  const zulu = now.toUTCString();
+  const tz = -now.getTimezoneOffset() / 60;
+  document.getElementById("time-strip").textContent =
+    `Local: ${local} | Zulu: ${zulu} | UTC${tz >= 0 ? "+" : ""}${tz}`;
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+/* ===== LOG ===== */
+const log = document.getElementById("log");
+function addLog(sender, msg) {
+  const div = document.createElement("div");
+  div.className = "log-line";
+  div.textContent = `<${sender}> ${msg}`;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+addLog("System", "Simulation initialized.");
+addLog("AWACS", "No unit selected.");
+addLog("ROKS Gangwon", "Standing by.");
+</script>
 
 </body>
 </html>
