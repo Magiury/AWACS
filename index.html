@@ -87,18 +87,88 @@ html, body {
 }
 
 /* ===== SIDEBAR ===== */
-#sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 340px;
-  height: 100vh;
-  background: #3a3e42;
-  border-left: 1px solid #222;
-  padding: 6px;
-  overflow-y: auto;
-  z-index: 999;
-}
+<div id="sidebar">
+
+  <!-- TAB BUTTONS -->
+  <div id="sidebar-tabs">
+    <div class="sidebar-tab active" onclick="switchSidebarTab('spec')">Specifications</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('emcon')">EMCON</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('damage')">Damage Control</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('arm')">Armaments</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('fuel')">Fuel</div>
+  </div>
+
+  <!-- SPECIFICATIONS -->
+  <div class="sidebar-tab-content active" id="tab-spec">
+    <!-- ⬇⬇⬇ GIỮ NGUYÊN PANEL CŨ CỦA BẠN ⬇⬇⬇ -->
+
+    <!-- UNIT STATUS -->
+    <div class="panel">
+      <div class="panel-header" onclick="togglePanel(this)">UNIT STATUS <span>▾</span></div>
+      <div class="panel-body">
+        <div class="unit-image">[Unknown]</div>
+        <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
+        <div class="row"><span>Unit Class</span><span>[Unknown]</span></div>
+        <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
+      </div>
+    </div>
+
+    <!-- SPECS -->
+    <div class="panel">
+      <div class="panel-header" onclick="togglePanel(this)">SPECS <span>▾</span></div>
+      <div class="panel-body">
+        <div class="row"><span>Side</span><span>[Unknown]</span></div>
+        <div class="row"><span>Course</span><span>[Unknown]</span></div>
+        <div class="row"><span>Speed</span><span>[Unknown]</span></div>
+        <div class="row"><span>Depth / Alt</span><span>[Unknown]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMCON -->
+  <div class="sidebar-tab-content" id="tab-emcon">
+    <div class="panel">
+      <div class="panel-header">EMCON</div>
+      <div class="panel-body">
+        Radar: [Unknown]<br>
+        Sonar: [Unknown]<br>
+        ECM: [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- DAMAGE -->
+  <div class="sidebar-tab-content" id="tab-damage">
+    <div class="panel">
+      <div class="panel-header">DAMAGE CONTROL</div>
+      <div class="panel-body">
+        Integrity: [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMAMENTS -->
+  <div class="sidebar-tab-content" id="tab-arm">
+    <div class="panel">
+      <div class="panel-header">ARMAMENTS</div>
+      <div class="panel-body">
+        [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- FUEL -->
+  <div class="sidebar-tab-content" id="tab-fuel">
+    <div class="panel">
+      <div class="panel-header">FUEL</div>
+      <div class="panel-body">
+        [Unknown]
+      </div>
+    </div>
+  </div>
+
+</div>
+
 
 /* ===== PANELS ===== */
 .panel {
@@ -292,6 +362,15 @@ toggleBtn.onclick = () => {
 addLog("System", "Simulation initialized.");
 addLog("AWACS", "No unit selected.");
 addLog("ROKS Gangwon", "Standing by.");
+</script>
+<script>
+function switchSidebarTab(tab) {
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sidebar-tab-content').forEach(c => c.classList.remove('active'));
+
+  document.querySelector(`[onclick="switchSidebarTab('${tab}')"]`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
 </script>
 
 </body>
