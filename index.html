@@ -87,87 +87,49 @@ html, body {
 }
 
 /* ===== SIDEBAR ===== */
-<div id="sidebar">
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 100vh;
+  background: #3a3e42;
+  border-left: 1px solid #222;
+  padding: 6px;
+  overflow-y: auto;
+  z-index: 999;
+}
 
-  <!-- TAB BUTTONS -->
-  <div id="sidebar-tabs">
-    <div class="sidebar-tab active" onclick="switchSidebarTab('spec')">Specifications</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('emcon')">EMCON</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('damage')">Damage Control</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('arm')">Armaments</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('fuel')">Fuel</div>
-  </div>
+/* ===== SIDEBAR TABS ===== */
+#sidebar-tabs {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
 
-  <!-- SPECIFICATIONS -->
-  <div class="sidebar-tab-content active" id="tab-spec">
-    <!-- ⬇⬇⬇ GIỮ NGUYÊN PANEL CŨ CỦA BẠN ⬇⬇⬇ -->
+.sidebar-tab {
+  background: #2f3337;
+  border: 1px solid #1c1f22;
+  font-size: 12px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #bbb;
+  margin-bottom: 2px;
+}
 
-    <!-- UNIT STATUS -->
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">UNIT STATUS <span>▾</span></div>
-      <div class="panel-body">
-        <div class="unit-image">[Unknown]</div>
-        <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
-        <div class="row"><span>Unit Class</span><span>[Unknown]</span></div>
-        <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
-      </div>
-    </div>
+.sidebar-tab.active {
+  background: #4a4f55;
+  color: #fff;
+  font-weight: bold;
+}
 
-    <!-- SPECS -->
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">SPECS <span>▾</span></div>
-      <div class="panel-body">
-        <div class="row"><span>Side</span><span>[Unknown]</span></div>
-        <div class="row"><span>Course</span><span>[Unknown]</span></div>
-        <div class="row"><span>Speed</span><span>[Unknown]</span></div>
-        <div class="row"><span>Depth / Alt</span><span>[Unknown]</span></div>
-      </div>
-    </div>
-  </div>
+.sidebar-tab-content {
+  display: none;
+}
 
-  <!-- EMCON -->
-  <div class="sidebar-tab-content" id="tab-emcon">
-    <div class="panel">
-      <div class="panel-header">EMCON</div>
-      <div class="panel-body">
-        Radar: [Unknown]<br>
-        Sonar: [Unknown]<br>
-        ECM: [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- DAMAGE -->
-  <div class="sidebar-tab-content" id="tab-damage">
-    <div class="panel">
-      <div class="panel-header">DAMAGE CONTROL</div>
-      <div class="panel-body">
-        Integrity: [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- ARMAMENTS -->
-  <div class="sidebar-tab-content" id="tab-arm">
-    <div class="panel">
-      <div class="panel-header">ARMAMENTS</div>
-      <div class="panel-body">
-        [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- FUEL -->
-  <div class="sidebar-tab-content" id="tab-fuel">
-    <div class="panel">
-      <div class="panel-header">FUEL</div>
-      <div class="panel-body">
-        [Unknown]
-      </div>
-    </div>
-  </div>
-
-</div>
+.sidebar-tab-content.active {
+  display: block;
+}
 
 
 /* ===== PANELS ===== */
@@ -291,9 +253,24 @@ html, body {
 <div id="main">
   <div id="map"></div>
 
-  <div id="sidebar">
+<div id="sidebar">
+
+  <!-- TAB BUTTONS -->
+  <div id="sidebar-tabs">
+    <div class="sidebar-tab active" onclick="switchSidebarTab('spec')">Specifications</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('emcon')">EMCON</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('damage')">Damage Control</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('arm')">Armaments</div>
+    <div class="sidebar-tab" onclick="switchSidebarTab('fuel')">Fuel</div>
+  </div>
+
+  <!-- SPECIFICATIONS -->
+  <div class="sidebar-tab-content active" id="tab-spec">
+
     <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">UNIT STATUS <span>▾</span></div>
+      <div class="panel-header" onclick="togglePanel(this)">
+        UNIT STATUS <span>▾</span>
+      </div>
       <div class="panel-body">
         <div class="unit-image">[Unknown]</div>
         <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
@@ -301,8 +278,65 @@ html, body {
         <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
       </div>
     </div>
+
+    <div class="panel">
+      <div class="panel-header" onclick="togglePanel(this)">
+        SPECS <span>▾</span>
+      </div>
+      <div class="panel-body">
+        <div class="row"><span>Side</span><span>[Unknown]</span></div>
+        <div class="row"><span>Course</span><span>[Unknown]</span></div>
+        <div class="row"><span>Speed</span><span>[Unknown]</span></div>
+        <div class="row"><span>Depth / Alt</span><span>[Unknown]</span></div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- EMCON -->
+  <div class="sidebar-tab-content" id="tab-emcon">
+    <div class="panel">
+      <div class="panel-header">EMCON</div>
+      <div class="panel-body">
+        Radar: [Unknown]<br>
+        Sonar: [Unknown]<br>
+        ECM: [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- DAMAGE -->
+  <div class="sidebar-tab-content" id="tab-damage">
+    <div class="panel">
+      <div class="panel-header">DAMAGE CONTROL</div>
+      <div class="panel-body">
+        Integrity: [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMAMENTS -->
+  <div class="sidebar-tab-content" id="tab-arm">
+    <div class="panel">
+      <div class="panel-header">ARMAMENTS</div>
+      <div class="panel-body">
+        [Unknown]
+      </div>
+    </div>
+  </div>
+
+  <!-- FUEL -->
+  <div class="sidebar-tab-content" id="tab-fuel">
+    <div class="panel">
+      <div class="panel-header">FUEL</div>
+      <div class="panel-body">
+        [Unknown]
+      </div>
+    </div>
+  </div>
+
 </div>
+
 
 <!-- MESSAGE BOX -->
 <div id="message-box" class="collapsed">
