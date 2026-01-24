@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Command UI – Refined Clone</title>
+<title>AWACS UI</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -91,7 +91,7 @@ html, body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 340px;
+  width: 360px;
   height: 100vh;
   background: #3a3e42;
   border-left: 1px solid #222;
@@ -100,82 +100,66 @@ html, body {
   z-index: 999;
 }
 
-/* ===== SIDEBAR TABS ===== */
-#sidebar-tabs {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 6px;
-}
-
-.sidebar-tab {
-  background: #2f3337;
-  border: 1px solid #1c1f22;
-  font-size: 12px;
-  padding: 6px 8px;
-  cursor: pointer;
-  color: #bbb;
-  margin-bottom: 2px;
-}
-
-.sidebar-tab.active {
-  background: #4a4f55;
-  color: #fff;
-  font-weight: bold;
-}
-
-.sidebar-tab-content {
-  display: none;
-}
-
-.sidebar-tab-content.active {
-  display: block;
-}
-
-
-/* ===== PANELS ===== */
-.panel {
+/* ===== ACCORDION SECTIONS ===== */
+.section {
   background: #4a4f55;
   border: 1px solid #2a2d30;
   margin-bottom: 6px;
 }
 
-.panel-header {
-  background: #3a3f44;
-  padding: 6px 8px;
+.section-header {
+  background: #2f3337;
+  padding: 7px 10px;
   font-size: 12px;
   font-weight: bold;
-  border-bottom: 1px solid #222;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  align-items: center;
 }
 
-.panel-body {
-  padding: 6px 8px;
+.section-body {
+  padding: 8px;
   font-size: 12px;
 }
 
-.panel.collapsed .panel-body {
+.section.collapsed .section-body {
   display: none;
 }
 
+/* ===== COMMON ===== */
 .row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 4px;
 }
 
+.unit-name {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
 .unit-image {
   background: #2a2d30;
   height: 120px;
-  margin-bottom: 6px;
+  border: 1px solid #1c1f22;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #888;
   font-style: italic;
-  border: 1px solid #1c1f22;
+  margin-bottom: 8px;
 }
+
+.sub-title {
+  font-weight: bold;
+  margin: 6px 0 4px;
+  font-size: 11px;
+  color: #cfd8dc;
+}
+
+.status-ok { color: #7CFC00; }
+.status-bad { color: #ff6b6b; }
 
 /* ===== MESSAGE BOX ===== */
 #message-box {
@@ -194,16 +178,7 @@ html, body {
   padding: 4px 6px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   font-weight: bold;
-}
-
-#message-header button {
-  background: #3a3e42;
-  border: 1px solid #111;
-  color: #ccc;
-  cursor: pointer;
-  font-size: 10px;
 }
 
 #message-content {
@@ -212,22 +187,14 @@ html, body {
 
 .log-line {
   line-height: 1.3em;
-  color: #cfd8dc;
 }
 
 .log-time {
   color: #9fa8b0;
-  margin-right: 4px;
 }
 
 .log-unit {
   color: #8ab4f8;
-  margin-right: 4px;
-}
-
-/* collapsed = chỉ hiện 1 dòng */
-#message-box.collapsed #message-content .log-line:not(:first-child) {
-  display: none;
 }
 </style>
 </head>
@@ -253,158 +220,86 @@ html, body {
 <div id="main">
   <div id="map"></div>
 
-<div id="sidebar">
+  <!-- ===== SIDEBAR ===== -->
+  <div id="sidebar">
 
-  <!-- TAB BUTTONS -->
-  <div id="sidebar-tabs">
-    <div class="sidebar-tab active" onclick="switchSidebarTab('spec')">Specifications</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('emcon')">EMCON</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('damage')">Damage Control</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('arm')">Armaments</div>
-    <div class="sidebar-tab" onclick="switchSidebarTab('fuel')">Fuel</div>
-  </div>
-
-  <!-- SPECIFICATIONS -->
-  <div class="sidebar-tab-content active" id="tab-spec">
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">
+    <!-- UNIT STATUS -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
         UNIT STATUS <span>▾</span>
       </div>
-      <div class="panel-body">
-        <div class="unit-image">[Unknown]</div>
-        <div class="row"><span>Unit Name</span><span>[Unknown]</span></div>
-        <div class="row"><span>Unit Class</span><span>[Unknown]</span></div>
-        <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
+      <div class="section-body">
+        <div class="unit-name">Mikoyan MiG-29 Fulcrum</div>
+
+        <div class="unit-image">[Unit Image]</div>
+
+        <div class="row"><span>Callsign</span><span>[Unknown]</span></div>
+
+        <div class="sub-title">ARMAMENT</div>
+        <div class="row"><span>Fox 1</span><span>[Unknown]</span></div>
+        <div class="row"><span>Fox 2</span><span>[Unknown]</span></div>
+        <div class="row"><span>Fox 3</span><span>[Unknown]</span></div>
+
+        <div class="sub-title">DAMAGE CONTROL</div>
+        <div class="row">
+          <span>Status</span>
+          <span class="status-ok">Operable</span>
+        </div>
       </div>
     </div>
 
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">
-        SPECS <span>▾</span>
+    <!-- UNIT DIRECTIVES -->
+    <div class="section collapsed">
+      <div class="section-header" onclick="toggleSection(this)">
+        UNIT DIRECTIVES <span>▾</span>
       </div>
-      <div class="panel-body">
-        <div class="row"><span>Side</span><span>[Unknown]</span></div>
-        <div class="row"><span>Course</span><span>[Unknown]</span></div>
+      <div class="section-body">
+        <div class="row"><span>Altitude</span><span>[Unknown]</span></div>
         <div class="row"><span>Speed</span><span>[Unknown]</span></div>
-        <div class="row"><span>Depth / Alt</span><span>[Unknown]</span></div>
+        <div class="row"><span>Bearing</span><span>[Unknown]</span></div>
+        <div class="row"><span>Task</span><span>[Unknown]</span></div>
+      </div>
+    </div>
+
+    <!-- UNIT EMCON -->
+    <div class="section collapsed">
+      <div class="section-header" onclick="toggleSection(this)">
+        UNIT EMCON <span>▾</span>
+      </div>
+      <div class="section-body">
+        <div class="row"><span>Radar</span><span>[Unknown]</span></div>
+        <div class="row"><span>Jammer</span><span>[Unknown]</span></div>
+        <div class="row"><span>Transponder</span><span>[Unknown]</span></div>
       </div>
     </div>
 
   </div>
-
-  <!-- EMCON -->
-  <div class="sidebar-tab-content" id="tab-emcon">
-    <div class="panel">
-      <div class="panel-header">EMCON</div>
-      <div class="panel-body">
-        Radar: [Unknown]<br>
-        Sonar: [Unknown]<br>
-        ECM: [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- DAMAGE -->
-  <div class="sidebar-tab-content" id="tab-damage">
-    <div class="panel">
-      <div class="panel-header">DAMAGE CONTROL</div>
-      <div class="panel-body">
-        Integrity: [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- ARMAMENTS -->
-  <div class="sidebar-tab-content" id="tab-arm">
-    <div class="panel">
-      <div class="panel-header">ARMAMENTS</div>
-      <div class="panel-body">
-        [Unknown]
-      </div>
-    </div>
-  </div>
-
-  <!-- FUEL -->
-  <div class="sidebar-tab-content" id="tab-fuel">
-    <div class="panel">
-      <div class="panel-header">FUEL</div>
-      <div class="panel-body">
-        [Unknown]
-      </div>
-    </div>
-  </div>
-
 </div>
 
-
 <!-- MESSAGE BOX -->
-<div id="message-box" class="collapsed">
-  <div id="message-header">
-    MESSAGE LOG
-    <button id="toggle-log">▲</button>
+<div id="message-box">
+  <div id="message-header">MESSAGE LOG</div>
+  <div id="message-content">
+    <div class="log-line">
+      <span class="log-time">[12:00:01]</span>
+      <span class="log-unit">&lt;System&gt;</span>
+      Simulation initialized.
+    </div>
   </div>
-  <div id="message-content"></div>
 </div>
 
 <script>
-/* PANEL TOGGLE */
-function togglePanel(header) {
+function toggleSection(header) {
   header.parentElement.classList.toggle("collapsed");
 }
 
-/* TIME */
 function updateTime() {
   const now = new Date();
-  const local = now.toLocaleString();
-  const zulu = now.toUTCString();
-  const tz = -now.getTimezoneOffset() / 60;
   document.getElementById("time-strip").textContent =
-    `Local: ${local} | Zulu: ${zulu} | UTC${tz >= 0 ? "+" : ""}${tz}`;
+    `Local: ${now.toLocaleString()} | Zulu: ${now.toUTCString()} | UTC${-now.getTimezoneOffset()/60}`;
 }
 setInterval(updateTime, 1000);
 updateTime();
-
-/* MESSAGE LOG */
-const messageBox = document.getElementById("message-box");
-const messageContent = document.getElementById("message-content");
-const toggleBtn = document.getElementById("toggle-log");
-const logs = [];
-
-function timeNow() {
-  return new Date().toLocaleTimeString();
-}
-
-function addLog(sender, msg) {
-  const line = `
-    <div class="log-line">
-      <span class="log-time">[${timeNow()}]</span>
-      <span class="log-unit">&lt;${sender}&gt;</span>
-      ${msg}
-    </div>`;
-  logs.unshift(line);
-  messageContent.innerHTML = logs.join("");
-}
-
-toggleBtn.onclick = () => {
-  messageBox.classList.toggle("collapsed");
-  toggleBtn.textContent =
-    messageBox.classList.contains("collapsed") ? "▲" : "▼";
-};
-
-/* TEST */
-addLog("System", "Simulation initialized.");
-addLog("AWACS", "No unit selected.");
-addLog("ROKS Gangwon", "Standing by.");
-</script>
-<script>
-function switchSidebarTab(tab) {
-  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.sidebar-tab-content').forEach(c => c.classList.remove('active'));
-
-  document.querySelector(`[onclick="switchSidebarTab('${tab}')"]`).classList.add('active');
-  document.getElementById(`tab-${tab}`).classList.add('active');
-}
 </script>
 
 </body>
