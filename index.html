@@ -25,19 +25,6 @@ html, body {
   border-bottom: 1px solid #1a1d20;
 }
 
-.unit-image {
-  background: #2a2d30;
-  height: 120px;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  font-style: italic;
-  border: 1px solid #1c1f22;
-}
-
-
 #logo {
   width: 34px;
   height: 34px;
@@ -55,7 +42,7 @@ html, body {
   font-weight: 600;
 }
 
-/* ===== TOOL BAR (GIỮ NGUYÊN) ===== */
+/* ===== TOOL BAR ===== */
 #tool-bar {
   height: 40px;
   background: linear-gradient(#4b4f54, #3a3e42);
@@ -83,6 +70,7 @@ html, body {
   align-items: center;
   padding: 0 10px;
   border-bottom: 1px solid #111;
+  opacity: 0.5;
 }
 
 /* ===== MAIN ===== */
@@ -98,7 +86,7 @@ html, body {
   height: 100%;
 }
 
-/* ===== SIDEBAR FLOAT ===== */
+/* ===== SIDEBAR ===== */
 #sidebar {
   position: fixed;
   top: 0;
@@ -111,7 +99,6 @@ html, body {
   overflow-y: auto;
   z-index: 999;
 }
-
 
 /* ===== PANELS ===== */
 .panel {
@@ -146,37 +133,69 @@ html, body {
   margin-bottom: 4px;
 }
 
-/* ===== MESSAGE LOG BAR ===== */
-#message-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+.unit-image {
+  background: #2a2d30;
+  height: 120px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-style: italic;
+  border: 1px solid #1c1f22;
+}
+
+/* ===== MESSAGE BOX ===== */
+#message-box {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  width: 420px;
   background: #1c1f22;
-  border-top: 1px solid #000;
+  border: 1px solid #000;
   font-size: 11px;
-  z-index: 5;
+  z-index: 500;
 }
 
 #message-header {
+  background: #2a2d30;
+  padding: 4px 6px;
   display: flex;
   justify-content: space-between;
-  padding: 4px 8px;
-  background: #23272b;
+  align-items: center;
+  font-weight: bold;
+}
+
+#message-header button {
+  background: #3a3e42;
+  border: 1px solid #111;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 10px;
 }
 
 #message-content {
-  padding: 4px 8px;
-  display: none;
-}
-
-#message-bar.expanded #message-content {
-  display: block;
+  padding: 4px 6px;
 }
 
 .log-line {
   line-height: 1.3em;
   color: #cfd8dc;
+}
+
+.log-time {
+  color: #9fa8b0;
+  margin-right: 4px;
+}
+
+.log-unit {
+  color: #8ab4f8;
+  margin-right: 4px;
+}
+
+/* collapsed = chỉ hiện 1 dòng */
+#message-box.collapsed #message-content .log-line:not(:first-child) {
+  display: none;
 }
 </style>
 </head>
@@ -203,7 +222,6 @@ html, body {
   <div id="map"></div>
 
   <div id="sidebar">
-
     <div class="panel">
       <div class="panel-header" onclick="togglePanel(this)">UNIT STATUS <span>▾</span></div>
       <div class="panel-body">
@@ -213,57 +231,25 @@ html, body {
         <div class="row"><span>Unit Type</span><span>[Unknown]</span></div>
       </div>
     </div>
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">SPECS <span>▾</span></div>
-      <div class="panel-body">
-        <div class="row"><span>Side</span><span>[Unknown]</span></div>
-        <div class="row"><span>Course</span><span>[Unknown]</span></div>
-        <div class="row"><span>Speed</span><span>[Unknown]</span></div>
-        <div class="row"><span>Depth / Alt</span><span>[Unknown]</span></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">DAMAGE <span>▾</span></div>
-      <div class="panel-body">Integrity: [Unknown]</div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">WEAPONS <span>▾</span></div>
-      <div class="panel-body">[Unknown]</div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">FUEL <span>▾</span></div>
-      <div class="panel-body">[Unknown]</div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header" onclick="togglePanel(this)">EMCON <span>▾</span></div>
-      <div class="panel-body">
-        Radar: [Unknown]<br>Sonar: [Unknown]<br>ECM: [Unknown]
-      </div>
-    </div>
-
-  </div>
-
-  <div id="message-bar">
-    <div id="message-header">
-      <span id="current-log"></span>
-      <button onclick="toggleLog()">▲</button>
-    </div>
-    <div id="message-content"></div>
   </div>
 </div>
 
+<!-- MESSAGE BOX -->
+<div id="message-box" class="collapsed">
+  <div id="message-header">
+    MESSAGE LOG
+    <button id="toggle-log">▲</button>
+  </div>
+  <div id="message-content"></div>
+</div>
+
 <script>
-/* ===== PANEL TOGGLE ===== */
+/* PANEL TOGGLE */
 function togglePanel(header) {
   header.parentElement.classList.toggle("collapsed");
 }
 
-/* ===== TIME ===== */
+/* TIME */
 function updateTime() {
   const now = new Date();
   const local = now.toLocaleString();
@@ -275,23 +261,34 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* ===== MESSAGE LOG ===== */
+/* MESSAGE LOG */
+const messageBox = document.getElementById("message-box");
+const messageContent = document.getElementById("message-content");
+const toggleBtn = document.getElementById("toggle-log");
 const logs = [];
-const currentLog = document.getElementById("current-log");
-const logContent = document.getElementById("message-content");
-const bar = document.getElementById("message-bar");
+
+function timeNow() {
+  return new Date().toLocaleTimeString();
+}
 
 function addLog(sender, msg) {
-  const text = `<${sender}> ${msg}`;
-  logs.push(text);
-  currentLog.textContent = text;
-  logContent.innerHTML = logs.map(l => `<div class="log-line">${l}</div>`).join("");
+  const line = `
+    <div class="log-line">
+      <span class="log-time">[${timeNow()}]</span>
+      <span class="log-unit">&lt;${sender}&gt;</span>
+      ${msg}
+    </div>`;
+  logs.unshift(line);
+  messageContent.innerHTML = logs.join("");
 }
 
-function toggleLog() {
-  bar.classList.toggle("expanded");
-}
+toggleBtn.onclick = () => {
+  messageBox.classList.toggle("collapsed");
+  toggleBtn.textContent =
+    messageBox.classList.contains("collapsed") ? "▲" : "▼";
+};
 
+/* TEST */
 addLog("System", "Simulation initialized.");
 addLog("AWACS", "No unit selected.");
 addLog("ROKS Gangwon", "Standing by.");
