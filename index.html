@@ -333,13 +333,6 @@ L.tileLayer(
   { attribution: '© OpenStreetMap, © Carto' }
 ).addTo(map);
 
-// Scale thật (tự động đổi theo zoom)
-L.control.scale({
-  position: 'bottomleft',
-  metric: true,
-  imperial: false
-}).addTo(map);
-
 // Update tọa độ tâm màn hình
 function updateCenter() {
   const c = map.getCenter();
