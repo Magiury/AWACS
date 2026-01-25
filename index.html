@@ -330,6 +330,24 @@ const map = L.map('map', {
   maxZoom: 10
 }).setView([21.0278, 105.8342], 4);
 
+L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+  {
+    noWrap: true
+  }
+).addTo(map);
+
+const bounds = [
+  [-85, -180],
+  [85, 180]
+];
+map.setMaxBounds(bounds);
+map.options.maxBoundsViscosity = 1.0;
+
+setTimeout(() => {
+  map.invalidateSize();
+}, 0);
+
 
 // Dark tactical style (đẹp + hợp AWACS)
 L.tileLayer(
