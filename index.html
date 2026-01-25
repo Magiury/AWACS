@@ -91,7 +91,7 @@ html, body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 360px;
+  width: 260px;
   height: 100vh;
   background: #3a3e42;
   border-left: 1px solid #222;
@@ -196,7 +196,36 @@ html, body {
 .log-unit {
   color: #8ab4f8;
 }
+
+/* ===== MAP OVERLAY ===== */
+#map-overlay {
+  position: fixed;
+  left: 10px;
+  bottom: 80px; /* xích lên trên để chừa message log */
+  background: rgba(28,31,34,0.85);
+  border: 1px solid #000;
+  padding: 6px 8px;
+  font-size: 11px;
+  z-index: 600;
+}
+
+#map-scale {
+  margin-bottom: 4px;
+  color: #cfd8dc;
+}
+
+#map-coords {
+  color: #9fa8b0;
+}
+
 </style>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
 </head>
 
 <body>
@@ -275,6 +304,10 @@ html, body {
 
   </div>
 </div>
+  
+<div id="map-overlay">
+  <div id="map-coords">Lat: -- | Lng: --</div>
+</div>
 
 <!-- MESSAGE BOX -->
 <div id="message-box">
@@ -288,6 +321,36 @@ html, body {
   </div>
 </div>
 
+  
+<script>
+const map = L.map('map', {
+  zoomControl: true
+}).setView([21.0278, 105.8342], 6);
+
+// Dark tactical style (đẹp + hợp AWACS)
+L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  { attribution: '© OpenStreetMap, © Carto' }
+).addTo(map);
+
+// Scale thật (tự động đổi theo zoom)
+L.control.scale({
+  position: 'bottomleft',
+  metric: true,
+  imperial: false
+}).addTo(map);
+
+// Update tọa độ tâm màn hình
+function updateCenter() {
+  const c = map.getCenter();
+  document.getElementById("map-coords").textContent =
+    `Lat: ${c.lat.toFixed(4)} | Lng: ${c.lng.toFixed(4)}`;
+}
+
+map.on("move", updateCenter);
+updateCenter();
+</script>
+  
 <script>
 function toggleSection(header) {
   header.parentElement.classList.toggle("collapsed");
