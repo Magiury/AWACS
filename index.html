@@ -342,9 +342,16 @@ const bounds = [
   [85, 180]
 ];
 map.whenReady(() => {
-  const sidebarWidth = 260; // đúng bằng sidebar của mày
-  map.panBy([sidebarWidth / 120, 0], { animate: false });
+  const center = map.getCenter();
+
+  // dịch sang TÂY (trái) ~ 1–2 độ, chỉnh số này
+  const shiftedCenter = L.latLng(center.lat, center.lng - 1.5);
+
+  map.setView(shiftedCenter, map.getZoom(), {
+    animate: false
+  });
 });
+
 
 map.setMaxBounds(bounds);
 map.options.maxBoundsViscosity = 1.0;
