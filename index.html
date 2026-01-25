@@ -324,8 +324,12 @@ html, body {
   
 <script>
 const map = L.map('map', {
-  zoomControl: false
-}).setView([21.0278, 105.8342], 6);
+  zoomControl: false,
+  attributionControl: false,
+  minZoom: 2,
+  maxZoom: 10
+}).setView([21.0278, 105.8342], 4);
+
 
 // Dark tactical style (đẹp + hợp AWACS)
 L.tileLayer(
