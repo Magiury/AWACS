@@ -340,9 +340,13 @@ L.tileLayer(
 const OFFSET_LNG = 10;
 
 const bounds = [
-  [-70, -155 + OFFSET_LNG],
-  [70, 155 + OFFSET_LNG]
+  [-85, -180],
+  [85, 180]
 ];
+map.whenReady(() => {
+  const sidebarWidth = 260; // đúng bằng sidebar của mày
+  map.panBy([sidebarWidth / 120, 0], { animate: false });
+});
 
 map.setMaxBounds(bounds);
 map.options.maxBoundsViscosity = 1.0;
