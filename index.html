@@ -56,22 +56,30 @@ html, body {
 .tool-btn {
   background: #5a5f65;
   border: 1px solid #2a2d30;
+  border-radius: 6px;
   color: #eee;
-  padding: 6px 10px;
+  padding: 6px 8px;
   font-size: 12px;
+  width: 34px;              /* QUAN TRỌNG */
+  height: 34px;
+  text-align: center;
+  line-height: 1.1em;
+  white-space: normal;       /* cho phép xuống dòng */
 }
+
 
 /* ===== TIME STRIP ===== */
 #time-strip {
   height: 26px;
-  background: #1f2225;
+  background: rgba(31, 34, 37, 0.35); /* mờ xuyên nền */
   font-size: 12px;
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid #111;
-  opacity: 0.5;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(2px);
 }
+
 
 /* ===== MAIN ===== */
 #main {
@@ -200,14 +208,17 @@ html, body {
 /* ===== MAP OVERLAY ===== */
 #map-overlay {
   position: fixed;
-  left: 10px;
-  bottom: 80px; /* xích lên trên để chừa message log */
-  background: rgba(28,31,34,0.85);
-  border: 1px solid #000;
-  padding: 6px 8px;
+  left: 12px;
+  bottom: 70px; /* gần message log */
+  background: none;
+  border: none;
+  padding: 0;
   font-size: 11px;
+  color: #9fa8b0;
   z-index: 600;
+  text-shadow: 0 0 2px #000;
 }
+
 
 #map-scale {
   margin-bottom: 4px;
@@ -217,6 +228,70 @@ html, body {
 #map-coords {
   color: #9fa8b0;
 }
+
+#system-info {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 11px;
+  color: #aab2b9;
+}
+
+#system-info .sys-logo {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #cfd8dc;
+  margin-bottom: 6px;
+}
+
+#system-info .sys-line {
+  display: flex;
+  justify-content: space-between;
+  opacity: 0.75;
+  margin-bottom: 2px;
+}
+
+
+.tool-btn.red {
+  background: linear-gradient(#8b2e2e, #6a1f1f);
+  border: 1px solid #2a2d30;
+  border-radius: 6px;
+  color: #eee;
+  padding: 6px 8px;
+  font-size: 12px;
+  width: 75px;              /* QUAN TRỌNG */
+  height: 34px;
+  text-align: center;
+  line-height: 0.95em;
+  white-space: normal; 
+}
+
+.tool-btn.blue {
+  background: linear-gradient(#2e5f8b, #1f3f6a);
+  border: 1px solid #2a2d30;
+  border-radius: 6px;
+  color: #eee;
+  padding: 6px 8px;
+  font-size: 12px;
+  width: 75px;              /* QUAN TRỌNG */
+  height: 34px;
+  text-align: center;
+  line-height: 0.95em;
+  white-space: normal; 
+}
+}
+
+.tool-btn.icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.tool-btn:hover {
+  background: #ddd;
+}
+
 
 </style>
 
@@ -238,11 +313,14 @@ html, body {
 <div id="tool-bar">
   <button class="tool-btn">⏸</button>
   <button class="tool-btn">▶</button>
-  <button class="tool-btn">⏩</button>
-  <button class="tool-btn">1x</button>
-  <button class="tool-btn">5x</button>
-  <button class="tool-btn">15x</button>
+
+  <button class="tool-btn red icon">◎ Auto Lock</button>
+  <button class="tool-btn red icon">✋︎ Manual Lock</button>
+
+  <button class="tool-btn blue icon">⬡ Auto CM</button>
+  <button class="tool-btn blue icon">⌘ Manual CM</button>
 </div>
+
 
 <div id="time-strip"></div>
 
@@ -250,60 +328,67 @@ html, body {
   <div id="map"></div>
 
   <!-- ===== SIDEBAR ===== -->
-  <div id="sidebar">
+<div id="sidebar">
 
-    <!-- UNIT STATUS -->
-    <div class="section">
-      <div class="section-header" onclick="toggleSection(this)">
-        UNIT STATUS <span>▾</span>
-      </div>
-      <div class="section-body">
-        <div class="unit-name">Mikoyan MiG-29 Fulcrum</div>
+  <!-- UNIT STATUS -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      UNIT STATUS <span>▾</span>
+    </div>
+    <div class="section-body">
+      <div class="unit-name">Mikoyan MiG-29 Fulcrum</div>
+      <div class="unit-image">[Unit Image]</div>
 
-        <div class="unit-image">[Unit Image]</div>
+      <div class="row"><span>Callsign</span><span>[Unknown]</span></div>
 
-        <div class="row"><span>Callsign</span><span>[Unknown]</span></div>
+      <div class="sub-title">ARMAMENT</div>
+      <div class="row"><span>Fox 1</span><span>[Unknown]</span></div>
+      <div class="row"><span>Fox 2</span><span>[Unknown]</span></div>
+      <div class="row"><span>Fox 3</span><span>[Unknown]</span></div>
 
-        <div class="sub-title">ARMAMENT</div>
-        <div class="row"><span>Fox 1</span><span>[Unknown]</span></div>
-        <div class="row"><span>Fox 2</span><span>[Unknown]</span></div>
-        <div class="row"><span>Fox 3</span><span>[Unknown]</span></div>
-
-        <div class="sub-title">DAMAGE CONTROL</div>
-        <div class="row">
-          <span>Status</span>
-          <span class="status-ok">Operable</span>
-        </div>
+      <div class="sub-title">DAMAGE CONTROL</div>
+      <div class="row">
+        <span>Status</span>
+        <span class="status-ok">Operable</span>
       </div>
     </div>
-
-    <!-- UNIT DIRECTIVES -->
-    <div class="section collapsed">
-      <div class="section-header" onclick="toggleSection(this)">
-        UNIT DIRECTIVES <span>▾</span>
-      </div>
-      <div class="section-body">
-        <div class="row"><span>Altitude</span><span>[Unknown]</span></div>
-        <div class="row"><span>Speed</span><span>[Unknown]</span></div>
-        <div class="row"><span>Bearing</span><span>[Unknown]</span></div>
-        <div class="row"><span>Task</span><span>[Unknown]</span></div>
-      </div>
-    </div>
-
-    <!-- UNIT EMCON -->
-    <div class="section collapsed">
-      <div class="section-header" onclick="toggleSection(this)">
-        UNIT EMCON <span>▾</span>
-      </div>
-      <div class="section-body">
-        <div class="row"><span>Radar</span><span>[Unknown]</span></div>
-        <div class="row"><span>Jammer</span><span>[Unknown]</span></div>
-        <div class="row"><span>Transponder</span><span>[Unknown]</span></div>
-      </div>
-    </div>
-
   </div>
+
+  <!-- UNIT DIRECTIVES -->
+  <div class="section collapsed">
+    <div class="section-header" onclick="toggleSection(this)">
+      UNIT DIRECTIVES <span>▾</span>
+    </div>
+    <div class="section-body">
+      <div class="row"><span>Altitude</span><span>[Unknown]</span></div>
+      <div class="row"><span>Speed</span><span>[Unknown]</span></div>
+      <div class="row"><span>Bearing</span><span>[Unknown]</span></div>
+      <div class="row"><span>Task</span><span>[Unknown]</span></div>
+    </div>
+  </div>
+
+  <!-- UNIT EMCON -->
+  <div class="section collapsed">
+    <div class="section-header" onclick="toggleSection(this)">
+      UNIT EMCON <span>▾</span>
+    </div>
+    <div class="section-body">
+      <div class="row"><span>Radar</span><span>[Unknown]</span></div>
+      <div class="row"><span>Jammer</span><span>[Unknown]</span></div>
+      <div class="row"><span>Transponder</span><span>[Unknown]</span></div>
+    </div>
+  </div>
+
+  <!-- SYSTEM INFO -->
+  <div id="system-info">
+    <div class="sys-logo">AWACS CONTROL SUITE</div>
+    <div class="sys-line"><span>Software</span><span>v0.3 ALPHA</span></div>
+    <div class="sys-line"><span>Simulation Core</span><span>JS Custom</span></div>
+    <div class="sys-line"><span>Map Engine</span><span>Leaflet 1.9.4</span></div>
+  </div>
+
 </div>
+
   
 <div id="map-overlay">
   <div id="map-coords">Lat: -- | Lng: --</div>
