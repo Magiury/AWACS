@@ -27,7 +27,14 @@
             transition: opacity 0.5s ease-in;
         }
 
-     
+        #login-container {
+            /* Giữ container ổn định */
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(70, 70, 70, 0.7);
+            padding: 40px 50px;
+            border-radius: 8px;
+            text-align: center;
+        }
 
         /* LOGO TẠM THỜI */
         #logo {
@@ -70,8 +77,11 @@
             font-weight: 600;
         }
 
+        /* TĂNG ĐỘ DÀI VÀ FIX KÍCH THƯỚC KHUNG INPUT */
         .input-group input {
-            width: calc(100% - 20px);
+            width: 320px; /* Độ dài cố định */
+            min-width: 320px; /* Ngăn co lại */
+            max-width: 320px; /* Ngăn giãn ra */
             padding: 12px 10px;
             background: #2a2a2a;
             border: 1px solid #444;
@@ -79,6 +89,7 @@
             color: #e0e0e0;
             font-size: 14px;
             transition: border-color 0.3s ease;
+            box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng thực tế */
         }
 
         .input-group input:focus {
@@ -88,7 +99,7 @@
         }
 
         button {
-            width: 100%;
+            width: 100%; /* Sẽ tự động theo chiều rộng của input group */
             padding: 12px;
             background: #4a4a4a; /* Nút màu xám */
             border: none;
@@ -127,12 +138,12 @@
 
     <div class="input-group">
         <label for="username">USERNAME:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required autocomplete="off">
     </div>
 
     <div class="input-group">
         <label for="password">PASSWORD:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required autocomplete="off">
     </div>
 
     <button type="submit" onclick="login()">ACCESS</button>
@@ -174,7 +185,7 @@
             document.body.classList.remove('fade-in');
             document.body.classList.add('fade-out');
             setTimeout(() => {
-                window.location.href = 'home001.html'; // Chuyển hướng đến index.html
+                window.location.href = 'home001.html'; // Chuyển hướng đến home001.html
             }, 500); // Đợi 0.5s để hiệu ứng fade out hoàn thành
         } else {
             errorMessage.textContent = 'ACCESS DENIED: Invalid username or password.';
