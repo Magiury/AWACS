@@ -8,7 +8,7 @@
         html, body {
             margin: 0;
             height: 100%;
-            background: #1a1a1a; /* Nền tối hơn */
+            background: #1a1a1a; 
             font-family: "Segoe UI", Tahoma, sans-serif;
             color: #e0e0e0;
             overflow: hidden;
@@ -17,7 +17,7 @@
             align-items: center;
         }
 
-        /* Hiệu ứng Fade In cho toàn bộ trang */
+        /* Hiệu ứng Fade In/Out */
         body.fade-out {
             opacity: 0;
             transition: opacity 0.5s ease-out;
@@ -27,32 +27,32 @@
             transition: opacity 0.5s ease-in;
         }
 
-       
+        #login-container {
+            text-align: center;
+        }
 
-        /* LOGO TẠM THỜI */
+        /* LOGO ĐÃ CHỈNH SỬA */
         #logo {
             width: 120px;
             height: 120px;
-            background: #333; /* Màu xám đen cho logo */
-            margin: 0 auto 30px auto; /* Canh giữa và tạo khoảng cách */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: #888;
-            border-radius: 50%; /* Hình tròn */
+            margin: 0 auto 30px auto;
+            border-radius: 50%; 
             border: 2px solid #555;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-            /* BẮT ĐẦU VÙNG NỔI BẬT CHO LOGO */
-           background-image: url('https://github.com/Magiury/AWACS/blob/main/Alphabest%20Logo.png'); background-size: cover;
-            /* KẾT THÚC VÙNG NỔI BẬT CHO LOGO */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            
+            /* Sử dụng link RAW từ GitHub để hiển thị được trên web */
+            background-image: url('https://raw.githubusercontent.com/Magiury/AWACS/main/Alphabest%20Logo.png'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #333; /* Màu nền dự phòng */
         }
 
         h2 {
             color: #ccc;
             margin-bottom: 25px;
             font-weight: 400;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
@@ -69,11 +69,8 @@
             font-weight: 600;
         }
 
-        /* TĂNG ĐỘ DÀI VÀ FIX KÍCH THƯỚC KHUNG INPUT */
         .input-group input {
-            width: 320px; /* Độ dài cố định */
-            min-width: 320px; /* Ngăn co lại */
-            max-width: 320px; /* Ngăn giãn ra */
+            width: 320px; 
             padding: 12px 10px;
             background: #2a2a2a;
             border: 1px solid #444;
@@ -81,7 +78,7 @@
             color: #e0e0e0;
             font-size: 14px;
             transition: border-color 0.3s ease;
-            box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng thực tế */
+            box-sizing: border-box; 
         }
 
         .input-group input:focus {
@@ -91,9 +88,9 @@
         }
 
         button {
-            width: 100%; /* Sẽ tự động theo chiều rộng của input group */
+            width: 100%;
             padding: 12px;
-            background: #4a4a4a; /* Nút màu xám */
+            background: #4a4a4a;
             border: none;
             border-radius: 4px;
             color: #fff;
@@ -106,7 +103,7 @@
         }
 
         button:hover {
-            background: #5e5e5e; /* Màu sáng hơn khi hover */
+            background: #5e5e5e;
             transform: translateY(-2px);
         }
 
@@ -114,18 +111,15 @@
             color: #ff6b6b;
             margin-top: 15px;
             font-size: 13px;
-            height: 20px; /* Giữ chỗ để tránh layout nhảy */
+            height: 20px;
         }
     </style>
 </head>
 <body class="fade-in">
 
 <div id="login-container">
-    <div id="logo">
-        AWACS
-        <br>
-        LOGO
-    </div>
+    <div id="logo"></div>
+
     <h2>SYSTEM ACCESS</h2>
 
     <div class="input-group">
@@ -145,40 +139,33 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Xử lý hiệu ứng fade-in khi tải trang
         document.body.classList.add('fade-in');
 
-        // Bắt sự kiện Enter trên các trường input
-        document.getElementById('username').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                login();
-            }
-        });
-        document.getElementById('password').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                login();
-            }
+        // Phím tắt Enter
+        const inputs = ['username', 'password'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') login();
+            });
         });
     });
 
     function login() {
-        const usernameInput = document.getElementById('username').value;
-        const passwordInput = document.getElementById('password').value;
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
         const errorMessage = document.getElementById('error-message');
 
-        // BẮT ĐẦU VÙNG NỔI BẬT CHO TÊN ĐĂNG NHẬP VÀ MẬT KHẨU
+        // Thông tin đăng nhập
         const correctUsername = "banzai";
         const correctPassword = "kamikaze";
-        // KẾT THÚC VÙNG NỔI BẬT
 
-        if (usernameInput === correctUsername && passwordInput === correctPassword) {
+        if (user === correctUsername && pass === correctPassword) {
             errorMessage.textContent = '';
-            // Fade out trước khi chuyển trang
             document.body.classList.remove('fade-in');
             document.body.classList.add('fade-out');
             setTimeout(() => {
-                window.location.href = 'home001.html'; // Chuyển hướng đến home001.html
-            }, 500); // Đợi 0.5s để hiệu ứng fade out hoàn thành
+                window.location.href = 'home001.html';
+            }, 500);
         } else {
             errorMessage.textContent = 'ACCESS DENIED: Invalid username or password.';
         }
